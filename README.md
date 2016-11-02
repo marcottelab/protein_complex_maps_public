@@ -31,20 +31,24 @@ for each experiment, each species, and all experiments concatenated
 
 ###Feature matrix
 
-(Any feature which you can put on a pair of proteins)
-python ./protein_complex_maps/features/build_feature_matrix.py
-input:
+*Any feature which you can put on a pair of proteins*
+
+`python ./protein_complex_maps/features/build_feature_matrix.py`
+
+**input**:
        all .corr_poisson.pairs
-output:
+
+**output**:
       feature_matrix.txt
 
-Note: this is the point to put in additional features like AP-MS etc. as long as it describes a pair of proteins
-pairs Feature1 Feature2 Feature3
-P1P3 Value2 value2 value3
-...
-n
+*Note: this is the point to put in additional features like AP-MS etc. as long as it describes a pair of proteins*
 
-n x m, where n = #prots choose 2, m = # of features
+|pairs |Feature1 |Feature2 |Feature3|
+|P1 P2 |value1 |value2 |value3|
+|...|...|...|...|
+|PN PN-1|value4|value5|value6|
+
+*n x m, where n = #prots choose 2, m = # of features*
 
 concatenation of individual .corr_poisson.pairs
 
