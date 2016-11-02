@@ -173,20 +173,20 @@ Also make sure complexes between training and test are completely separated*
 `python ./protein_complex_maps/features/clustering_parameter_optimization.py`
 
 **inputs**:
-     + corum_train_labeled.libsvm1.scale.libsvm0.scaleByTrain.resultsWprob_pairs_noself_nodups_wprob.txt
++ corum_train_labeled.libsvm1.scale.libsvm0.scaleByTrain.resultsWprob_pairs_noself_nodups_wprob.txt
      
-     + nonredundant_allComplexesCore_mammals_merged06.train.txt
++ nonredundant_allComplexesCore_mammals_merged06.train.txt
 
 **outputs**:
-      corum_train_labeled.libsvm1.scale.libsvm0.scaleByTrain.resultsWprob_pairs_noself_nodups_wprob_combined.best_cluster_wOverlap_nr_allComplexesCore_mammals_psweep_clusterone_mcl.txt
-      corum_train_labeled.libsvm1.scale.libsvm0.scaleByTrain.resultsWprob_pairs_noself_nodups_wprob.best_cluster_wOverlap_nr_allComplexesCore_mammals_psweep_clusterone_mcl.out
++ corum_train_labeled.libsvm1.scale.libsvm0.scaleByTrain.resultsWprob_pairs_noself_nodups_wprob_combined.best_cluster_wOverlap_nr_allComplexesCore_mammals_psweep_clusterone_mcl.txt
++ corum_train_labeled.libsvm1.scale.libsvm0.scaleByTrain.resultsWprob_pairs_noself_nodups_wprob.best_cluster_wOverlap_nr_allComplexesCore_mammals_psweep_clusterone_mcl.out
 
 *Do a parameter sweep (about 1000 different possibilities*
 
 + PPi score threshold [1.0, 0.9., 0.8 ... .1]
 + Clusterone parameters 
-..+ overlap (jaccard score) [0.8, 0.7, 0.6]  -- merging complexes with overlap
-..+ density (threshold of total number of interactions vs. total possible interactions) unconnected -> fully connected
+... overlap (jaccard score) [0.8, 0.7, 0.6]  -- merging complexes with overlap
+... density (threshold of total number of interactions vs. total possible interactions) unconnected -> fully connected
 + MCL inflation [1.2, 3, 4, 7]
 
    Process : Run through clusterone, then run clusters from clusterone through MCL.
