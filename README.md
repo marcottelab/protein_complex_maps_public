@@ -70,14 +70,12 @@ for each experiment, each species, and all experiments concatenated
 
 **output**:
 
-+[input_basename].test.txt
+...[input_basename].test.txt
 
-+[input_basename].train.txt
+...[input_basename].train.txt
 
 +[input_basename].test_ppis.txt
-
 +[input_basename].train_ppis.txt
-
 +[input_basename].neg_test_ppis.txt
 
 +[input_basename].neg_train_ppis.txt
