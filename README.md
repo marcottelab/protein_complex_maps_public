@@ -6,12 +6,13 @@ protein_complex_maps
 ##Elution correlation
 ###Correlation matrices
 for each experiment, each species, and all experiments concatenated
+
 python ./protein_complex_maps/external/score.py
 
-input:
+*input*:
       tab separated wide elution profile
 
-output:
+*output*:
       corr_poisson
      #output is a giant all by all matrix
 
