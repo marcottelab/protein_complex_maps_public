@@ -51,28 +51,31 @@ for each experiment, each species, and all experiments concatenated
 
 *n x m, where n = #prots choose 2, m = # of features*
 
-concatenation of individual .corr_poisson.pairs
 
-###Format corum
-Plant corum core mammal svm training
-Randomly split the corum complexes into training and test (split)
-Remove redundancy from corum (merge similar clusters)
-(claire: not sure exactly how this was done)
+###Format corum into test and training sets
+*Remove redundancy from corum (merge similar clusters)*
 
- remove header from nonredundant_allComplexesCore_mammals_euNOG.csv
+`python ./protein_complex_maps/complex_merge.py`
 
-reduce redundancy in eunog corum complexes
-/home/kdrew/scripts/protein_complex_maps/protein_complex_maps/complex_merge.py
-input:
-      nonredundant_allComplexesCore_mammals_euNOG.csv
-output:
-     nonredundant_allComplexesCore_mammals_euNOG_merged06.txt
+**input**:
+      nonredundant_allComplexesCore_mammals.csv
+**output**:
+     nonredundant_allComplexesCore_mammals_merged06.txt
 
-/home/kdrew/scripts/protein_complex_maps/protein_complex_maps/features/split_complexes.py
+*Randomly split the corum complexes into training and test (split)*
 
-input: complexes nonredundant_allComplexesCore_mammals_euNOG_merged06.txt
+`python ./protein_complex_maps/features/split_complexes.py`
 
-output:
+**input**: complexes nonredundant_allComplexesCore_mammals_merged06.txt
+
+**output**:
+
+*[input_basename].test.txt
+*[input_basename].train.txt
+*[input_basename].test_ppis.txt
+*[input_basename].train_ppis.txt
+*[input_basename].neg_test_ppis.txt
+*[input_basename].neg_train_ppis.txt
 
    Takes any pairwise overlap between train and test ppi, and randomly throw out from one. Train and test need to be totally different
    So say complex 1 = AB, AC, BC & complex 2 = AB AC AD BC BD => complex 1 = AB BC, complex 2 = AB AD CD
