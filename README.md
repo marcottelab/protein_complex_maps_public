@@ -44,6 +44,7 @@ for each experiment, each species, and all experiments concatenated
 *Note: this is the point to put in additional features like AP-MS etc. as long as it describes a pair of proteins*
 
 |pairs |Feature1 |Feature2 |Feature3|
+|--- | --- | --- | --- |
 |P1 P2 |value1 |value2 |value3|
 |...|...|...|...|
 |PN PN-1|value4|value5|value6|
