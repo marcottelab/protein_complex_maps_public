@@ -110,7 +110,7 @@ Also make sure complexes between training and test are completely separated*
 
 *SVM biased toward large numbers in features. Scaling just puts all features scaled to 1.*
 
-`python $LIBSVM_HOME/svm-scale`
+`$LIBSVM_HOME/svm-scale`
 
 **input**:
       corum_train_labeled.libsvm1.scale_parameters
@@ -132,80 +132,63 @@ Also make sure complexes between training and test are completely separated*
       corum_train_labeled.libsvm1.scale.txt.out
 
 
-Train classifier
-then make prediction on all the 0's (the unlabled) (currently run with train.sh)
-Takes optimal c and g from SVM training and trains a classifier
-/home/kdrew/programs/libsvm-3.20/svm-train
-input:
-      corum_train_labeled.libsvm1.scale.txt
-output:
-      corum_train_labeled.libsvm1.scale.model_c32_g05 (with c and g values)
+###Train classifier
 
-predict unlabeled set w/ test set on train model
-/home/kdrew/programs/libsvm-3.20/svm-predict
-input:
-      corum_train_labeled.libsvm0.scaleByTrain.txt, corum_train_labeled.libsvm1.scale.model_c32_g05
-output:
+*Takes optimal c and g from SVM training and trains a classifier*
+
+`$LIBSVM_HOME/svm-train`
+
+**input**:
+      corum_train_labeled.libsvm1.scale.txt
+
+**output**:
+      corum_train_labeled.libsvm1.scale.model_c_g (with c and g values)
+
+*predict unlabeled set w/ test set on train model*
+
+`$LIBSVM_HOME/svm-predict`
+
+**input**:
+      corum_train_labeled.libsvm0.scaleByTrain.txt, corum_train_labeled.libsvm1.scale.model_c_g
+
+**output**:
       corum_train_labeled.libsvm0.scaleByTrain.resultsWprob
 
-probability ordered list of pairs for unlabeled and test set (putting svm format into pairwise format) (order by score (prob of being true, 2nd column), dropping probability)
-/home/kdrew/scripts/protein_complex_maps/protein_complex_maps/features/svm_results2pairs.py
-inputs:
-      corum_train_labeled.txt, corum_train_labeled.libsvm0.scaleByTrain.resultsWprob
-output:
-      corum_train_labeled.libsvm0.scaleByTrain.resultsWprob_pairs_noself_nodups.txt
+*probability ordered list of pairs*
 
-probability ordered list of pairs for unlabeled and test set with probability(order by score (prob of being true, 2nd column), keeping probability this time)
-/home/kdrew/scripts/protein_complex_maps/protein_complex_maps/features/svm_results2pairs.py
-inputs:
+`python ./protein_complex_maps/features/svm_results2pairs.py`
+
+**inputs**:
       corum_train_labeled.txt, corum_train_labeled.libsvm0.scaleByTrain.resultsWprob
-output:
+
+**output**:
       corum_train_labeled.libsvm0.scaleByTrain.resultsWprob_pairs_noself_nodups_wprob.txt
 
-predict training set on train model
-We also want probability score for the training set
-/home/kdrew/programs/libsvm-3.20/svm-predict
-inputs:
-      corum_train_labeled.libsvm1.scale.txt
-      corum_train_labeled.libsvm1.scale.model_c32_g05
-output:
-      corum_train_labeled.libsvm1.scale.resultsWprob
 
-probability ordered list of pairs for training set with probability
-Order training set by probability
-/home/kdrew/scripts/protein_complex_maps/protein_complex_maps/features/svm_results2pairs.py
-inputs:
-      corum_train_labeled.txt, corum_train_labeled.libsvm0.scaleByTrain.resultsWprob
-output:
-      corum_train_labeled.libsvm1.scale.resultsWprob_pairs_noself_nodups_wprob.txt
+###Cluster PPis
+*At this point, want to find clusters (dense regions)*
 
-combine results from both test and training predictions (we could train everything at once so there is not this extra combination step but keeping consistent with previous work flow
-cat corum_train_labeled.libsvm1.scale.resultsWprob_pairs_noself_nodups_wprob.txt corum_train_labeled.libsvm0.scaleByTrain.resultsWprob_pairs_noself_nodups_wprob.txt |sort -g -k 3 -r > corum_train_labeled.libsvm1.scale.libsvm0.scaleByTrain.resultsWprob_pairs_noself_nodups_wprob_combined.txt
+*two-stage clustering*
 
-#this is a side step, not in scripts for plants
-The uncover the answer (+1 or -1) and see how classifier did
---> Gives a score [0,1] where we can rank predictions
---> The evaluate in precision recall framework using the +/- 1
+`python ./protein_complex_maps/features/clustering_parameter_optimization.py`
 
-Cluster PPis
-Plant clustering parameter sweep
-Protein Interaction Network, but hairbally
-At this point, want to find clusters (dense regions)
+**inputs**:
+     + corum_train_labeled.libsvm1.scale.libsvm0.scaleByTrain.resultsWprob_pairs_noself_nodups_wprob.txt
+     
+     + nonredundant_allComplexesCore_mammals_merged06.train.txt
 
-two-stage clustering:
-/project/cmcwhite/protein_complex_maps/protein_complex_maps/features/clustering_parameter_optimization.py
-input:
-      corum_train_labeled.libsvm1.scale.libsvm0.scaleByTrain.resultsWprob_pairs_noself_nodups_wprob_combined_filtered05.txt
-     /project/cmcwhite/protein_complex_maps/protein_complex_maps/orthology_proteomics/corum/nonredundant_allComplexesCore_mammals_euNOG_merged06.train.txt
-outputs:
-      corum_train_labeled.libsvm1.scale.libsvm0.scaleByTrain.resultsWprob_pairs_noself_nodups_wprob_combined.best_cluster_wOverlap_nr_allComplexesCore_mammals_euNOG_psweep_clusterone_mcl.txt
-      corum_train_labeled.libsvm1.scale.libsvm0.scaleByTrain.resultsWprob_pairs_noself_nodups_wprob_combined_filtered05.best_cluster_wOverlap_nr_allComplexesCore_mammals_euNOG_psweep_clusterone_mcl.out
+**outputs**:
+      corum_train_labeled.libsvm1.scale.libsvm0.scaleByTrain.resultsWprob_pairs_noself_nodups_wprob_combined.best_cluster_wOverlap_nr_allComplexesCore_mammals_psweep_clusterone_mcl.txt
+      corum_train_labeled.libsvm1.scale.libsvm0.scaleByTrain.resultsWprob_pairs_noself_nodups_wprob.best_cluster_wOverlap_nr_allComplexesCore_mammals_psweep_clusterone_mcl.out
 
-   Do a parameter sweep (about 1000 different possibilities
-   PPi score threshold [1.0, 0.9., 0.8 ... .1]
-   Clusterone parameters : overlap (jaccard score) [0.8, 0.7, 0.6]  -- merging complexes with overlap
-                                       density (threshold of total number of interactions vs. total possible interactions) unconnected -> fully connected
-   MCL inflation [1.2, 3, 4, 7]
+*Do a parameter sweep (about 1000 different possibilities*
+
++ PPi score threshold [1.0, 0.9., 0.8 ... .1]
++ Clusterone parameters 
+..+ overlap (jaccard score) [0.8, 0.7, 0.6]  -- merging complexes with overlap
+..+ density (threshold of total number of interactions vs. total possible interactions) unconnected -> fully connected
++ MCL inflation [1.2, 3, 4, 7]
+
    Process : Run through clusterone, then run clusters from clusterone through MCL.
    Output : a set of clusters times # of possible combinations
    Then select best set of clusters (usually a couple thousand)
