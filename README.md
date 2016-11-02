@@ -189,45 +189,45 @@ Also make sure complexes between training and test are completely separated*
     + density (threshold of total number of interactions vs. total possible interactions) unconnected -> fully connected
 + MCL inflation [1.2, 3, 4, 7]
 
-   Process : Run through clusterone, then run clusters from clusterone through MCL.
-   Output : a set of clusters times # of possible combinations
-   Then select best set of clusters (usually a couple thousand)
-        by comparing to corum training complex set
-                -> for human optimized by clique size
-        so, take a predicted complex, and see jaccard overlap with a training complex (precision)
-             take a training complex, and see how many recalled (also using jaccard overlap)
-             normalized based on size of the complex
-        Optimized harmonic mean of precision & recall (hmean). If numbers pres/rec aren't balanced it downweights it.
-            We want a balance between precision / recall
-        Rank clusters by hmean, pick top one, and that's the map.
-                Evaluate on the leave-out set of complexes for hmean
+**Process**: Run through clusterone, then run clusters from clusterone through MCL.
 
-generate cytoscape network
-(in cytoscape_networks directory)
-plant complex cytoscape network
+**Output**: a set of clusters times # of possible combinations
 
-Make clusters into pairs
-python /project/cmcwhite/protein_complex_maps/protein_complex_maps/util/cluster2pairwise.py
-input:
-      corum_train_labeled.libsvm1.scale.libsvm0.scaleByTrain.resultsWprob_pairs_noself_nodups_wprob_combined.best_cluster_wOverlap_nr_allComplexesCore_mammals_euNOG_psweep_clusterone_mcl.ii353.txt
-output:
-      corum_train_labeled.libsvm1.scale.libsvm0.scaleByTrain.resultsWprob_pairs_noself_nodups_wprob_combined.best_cluster_wOverlap_nr_allComplexesCore_mammals_euNOG_psweep_clusterone_mcl.ii353.pairsWclustID.txt
+Select best set of clusters (usually a couple thousand) by comparing to corum training complex set using K-Cliques metric or other comparison metric
 
-Make clusters into node table
-/project/cmcwhite/protein_complex_maps/protein_complex_maps/util/cluster2node_table.py
-input:
-       corum_train_labeled.libsvm1.scale.libsvm0.scaleByTrain.resultsWprob_pairs_noself_nodups_wprob_combined.best_cluster_wOverlap_nr_allComplexesCore_mammals_euNOG_psweep_clusterone_mcl.ii353.txt
-output:
-      corum_train_labeled.libsvm1.scale.libsvm0.scaleByTrain.resultsWprob_pairs_noself_nodups_wprob_combined.best_cluster_wOverlap_nr_allComplexesCore_mammals_euNOG_psweep_clusterone_mcl.ii353.nodeTable.txt
+###Generate Cytoscape Network
 
-Make edge attribute table
-/project/cmcwhite/protein_complex_maps//protein_complex_maps/util/pairwise2clusterid.py
-inputs:
-       corum_train_labeled.libsvm1.scale.libsvm0.scaleByTrain.resultsWprob_pairs_noself_nodups_wprob_combined_filtered05.txt       corum_train_labeled.libsvm1.scale.libsvm0.scaleByTrain.resultsWprob_pairs_noself_nodups_wprob_combined.best_cluster_wOverlap_nr_allComplexesCore_mammals_euNOG_psweep_clusterone_mcl.ii353.txt
-       all .corr_poisson files
-output:
-      corum_train_labeled.libsvm1.scale.libsvm0.scaleByTrain.resultsWprob_pairs_noself_nodups_wprob_combined.best_cluster_wOverlap_nr_allComplexesCore_mammals_euNOG_psweep_clusterone_mcl.ii353.edgeAttributeWClusterid.txt
+*Make clusters into pairs*
+
+`python ./protein_complex_maps/util/cluster2pairwise.py`
+
+**input**:
+corum_train_labeled.libsvm1.scale.libsvm0.scaleByTrain.resultsWprob_pairs_noself_nodups_wprob_combined.best_cluster_wOverlap_nr_allComplexesCore_mammals_psweep_clusterone_mcl.[best].txt
+
+**output**:
+corum_train_labeled.libsvm1.scale.libsvm0.scaleByTrain.resultsWprob_pairs_noself_nodups_wprob_combined.best_cluster_wOverlap_nr_allComplexesCore_mammals_psweep_clusterone_mcl.[best].pairsWclustID.txt
+
+*Make clusters into node table*
+
+`python ./protein_complex_maps/util/cluster2node_table.py`
+
+**input**:
+corum_train_labeled.libsvm1.scale.libsvm0.scaleByTrain.resultsWprob_pairs_noself_nodups_wprob_combined.best_cluster_wOverlap_nr_allComplexesCore_mammals_psweep_clusterone_mcl.[best].txt
+       
+**output**:
+corum_train_labeled.libsvm1.scale.libsvm0.scaleByTrain.resultsWprob_pairs_noself_nodups_wprob_combined.best_cluster_wOverlap_nr_allComplexesCore_mammals_psweep_clusterone_mcl.[best].nodeTable.txt
+
+*Make edge attribute table*
+
+`python ./protein_complex_maps/util/pairwise2clusterid.py`
+
+**inputs**:
++ corum_train_labeled.libsvm1.scale.libsvm0.scaleByTrain.resultsWprob_pairs_noself_nodups_wprob.txt       
++ corum_train_labeled.libsvm1.scale.libsvm0.scaleByTrain.resultsWprob_pairs_noself_nodups_wprob.best_cluster_wOverlap_nr_allComplexesCore_mammals_psweep_clusterone_mcl.[best].txt
+
+**output**:
+corum_train_labeled.libsvm1.scale.libsvm0.scaleByTrain.resultsWprob_pairs_noself_nodups_wprob.best_cluster_wOverlap_nr_allComplexesCore_mammals_psweep_clusterone_mcl.[best].edgeAttributeWClusterid.txt
 
 
-
+*Load into Cytoscape*
 
