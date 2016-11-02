@@ -1,16 +1,16 @@
 protein_complex_maps
 ====================
 
-Kdrew's scripts for handling protein complex map data
+#Scripts for handling protein complex map data
 
-Start with elution profiles (/correlation_elutions)
+1. Start with elution profiles (/correlation_elutions)
 5 organisms
 ~1000 fractions
 columns = fractions
 rows = proteins/euNOGs
 
 plant elution correlation
-Correlation matrices
+2. Correlation matrices
 for each experiment, each species, and all experiments concatenated
 /home/kdrew/scripts/blake_complexes/score.py
 input:
@@ -19,7 +19,7 @@ output:
       corr_poisson
      #output is a giant all by all matrix
 
-Reformat all by all to tidy (3 column)
+3. Reformat all by all to tidy (3 column)
 /project/cmcwhite/protein_complex_maps/protein_complex_maps/features/convert_correlation.py
 input:
       corr_poisson
@@ -29,7 +29,7 @@ output:
 P1 P2 correlation_coefficient
 For all protein pairs
 
-Feature matrix
+4. Feature matrix
 (Any feature which you can put on a pair of proteins)
 /project/cmcwhite/protein_complex_maps/protein_complex_maps/features/build_feature_matrix.py
 input:
@@ -46,7 +46,7 @@ n x m, where n = #prots choose 2, m = # of features
 
 concatenation of individual .corr_poisson.pairs
 
-Format corum
+5. Format corum
 Plant corum core mammal svm training
 Randomly split the corum complexes into training and test (split)
 Remove redundancy from corum (merge similar clusters)
