@@ -74,11 +74,11 @@ for each experiment, each species, and all experiments concatenated
 
 ...[input_basename].train.txt
 
-+[input_basename].test_ppis.txt
-+[input_basename].train_ppis.txt
-+[input_basename].neg_test_ppis.txt
++ [input_basename].test_ppis.txt
++ [input_basename].train_ppis.txt
++ [input_basename].neg_test_ppis.txt
 
-+[input_basename].neg_train_ppis.txt
++ [input_basename].neg_train_ppis.txt
 
    Takes any pairwise overlap between train and test ppi, and randomly throw out from one. Train and test need to be totally different
    So say complex 1 = AB, AC, BC & complex 2 = AB AC AD BC BD => complex 1 = AB BC, complex 2 = AB AD CD
