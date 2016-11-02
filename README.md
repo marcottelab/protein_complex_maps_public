@@ -69,77 +69,68 @@ for each experiment, each species, and all experiments concatenated
 **input**: complexes nonredundant_allComplexesCore_mammals_merged06.txt
 
 **output**:
-
-...[input_basename].test.txt
-
-...[input_basename].train.txt
-
++ [input_basename].test.txt
++ [input_basename].train.txt
 + [input_basename].test_ppis.txt
 + [input_basename].train_ppis.txt
 + [input_basename].neg_test_ppis.txt
-
 + [input_basename].neg_train_ppis.txt
 
-   Takes any pairwise overlap between train and test ppi, and randomly throw out from one. Train and test need to be totally different
-   So say complex 1 = AB, AC, BC & complex 2 = AB AC AD BC BD => complex 1 = AB BC, complex 2 = AB AD CD
-   Also make sure complexes between training and test are completely separated
+*Takes any pairwise overlap between train and test ppi, and randomly removes ppi from either test or train. 
+So say complex 1 = AB, AC, BC & complex 2 = AB AC AD BC BD => complex 1 = AB BC, complex 2 = AB AD CD
+Also make sure complexes between training and test are completely separated*
 
-Make feature matrix w/ labels from corum (euNOG corum) (/corum) current control script: arathtraesorysj_euNOG_run.sh
-/home/kdrew/scripts/protein_complex_maps/protein_complex_maps/features/add_label.py
-input:
+###Make feature matrix w/ labels from corum 
+
+`python ./protein_complex_maps/features/add_label.py`
+
+**input**:
      feature_matrix.txt
-output:
+
+**output**:
       corum_train_labeled.txt
 
-/home/kdrew/scripts/protein_complex_maps/protein_complex_maps/features/add_label.py
-input:
-      feature_matrix.txt
-output:
-      corum_test_labeled.txt  #Is this ever used?
+*(These are the possible labels)*
++ *+1 positive label = pair is co-complex in corum*
++ *-1 negative label = pair is in corum, but not in same complex*
++ *0 = at least one protein in the pair is not in corum*
 
-(These are the possible labels)
-+1 positive label = pair is co-complex in corum
--1 negative label = pair is in corum, but not in same complex
-0 = at least one protein in the pair is not in corum
+###Make input for the SVM
 
-Make input for the SVM
-Convert to libsvm format training set, strips out a lot of headers, etc.
-/home/kdrew/scripts/protein_complex_maps/protein_complex_maps/features/feature2libsvm.py
-input:
+*Convert to libsvm format training set, strips out a lot of headers, etc.*
+
+`python ./protein_complex_maps/features/feature2libsvm.py`
+
+**input**:
       corum_train_labeled.txt
-output:
+
+**output**:
       corum_train_labeled.libsvm1.txt, tab separated
-pairs Feature1 Feature2 Feature3
 
-Convert to libsvm format test set, strips out a lot of headers, etc.
- /home/kdrew/scripts/protein_complex_maps/protein_complex_maps/features/feature2libsvm.py
-input:
-      corum_test_labeled.txt
-output:
-      corum_test_labeled.libsvm1.txt, tab separated
--- keep_labels (0, 1, -1)
 
-SVM biased toward large numbers in features. Scaling just puts all features scaled to 1.
-/home/kdrew/programs/libsvm-3.20/svm-scale
-input:
+*SVM biased toward large numbers in features. Scaling just puts all features scaled to 1.*
+
+`python $LIBSVM_HOME/svm-scale`
+
+**input**:
       corum_train_labeled.libsvm1.scale_parameters
-output:
-      corum_train_labeled.libsvm1.scale.txt
-/home/kdrew/programs/libsvm-3.20/svm-scale
-input:
-      corum_test_labeled.libsvm1.scale_parameters
-output:
-      corum_test_labeled.libsvm1.scale.txt
 
-SVM training and parameter sweep
-(takes a long time)
-Trained on training PPI set. Anything is Test PPis given 0's
-##: parameter sweep using training set (trains on 9/10th, compared to leave out)
-python ~/programs/libsvm-3.20/tools/grid.py
-input:
+**output**:
       corum_train_labeled.libsvm1.scale.txt
-output:
+
+
+*SVM training and parameter sweep to optimize C and gamma*
+
+*parameter sweep using training set (trains on 9/10th, compared to leave out)*
+
+`python $LIBSVM_HOME/tools/grid.py`
+
+**input**:
+      corum_train_labeled.libsvm1.scale.txt
+
+**output**:
       corum_train_labeled.libsvm1.scale.txt.out
+
 
 Train classifier
 then make prediction on all the 0's (the unlabled) (currently run with train.sh)
