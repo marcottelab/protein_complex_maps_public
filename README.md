@@ -185,8 +185,8 @@ Also make sure complexes between training and test are completely separated*
 
 + PPi score threshold [1.0, 0.9., 0.8 ... .1]
 + Clusterone parameters 
-... overlap (jaccard score) [0.8, 0.7, 0.6]  -- merging complexes with overlap
-... density (threshold of total number of interactions vs. total possible interactions) unconnected -> fully connected
+    + overlap (jaccard score) [0.8, 0.7, 0.6]  -- merging complexes with overlap
+    + density (threshold of total number of interactions vs. total possible interactions) unconnected -> fully connected
 + MCL inflation [1.2, 3, 4, 7]
 
    Process : Run through clusterone, then run clusters from clusterone through MCL.
