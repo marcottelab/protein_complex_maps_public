@@ -15,7 +15,7 @@ for each experiment, each species, and all experiments concatenated
 **output**:
       corr_poisson
 
-     *output is a giant all by all matrix*
+*output is a giant all by all matrix*
 
 ###Reformat all by all to tidy (3 column)
 
