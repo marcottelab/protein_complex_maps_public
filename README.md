@@ -7,26 +7,30 @@ protein_complex_maps
 ###Correlation matrices
 for each experiment, each species, and all experiments concatenated
 
-python ./protein_complex_maps/external/score.py
+`python ./protein_complex_maps/external/score.py`
 
-*input*:
+**input**:
       tab separated wide elution profile
 
-*output*:
+**output**:
       corr_poisson
-     #output is a giant all by all matrix
+
+     *output is a giant all by all matrix*
 
 ###Reformat all by all to tidy (3 column)
-python ./protein_complex_maps/features/convert_correlation.py
-input:
+
+`python ./protein_complex_maps/features/convert_correlation.py`
+
+**input**:
       corr_poisson
-output:
+
+**output**:
       corr_poisson.pairs
 
-P1 P2 correlation_coefficient
-For all protein pairs
+*P1 P2 correlation_coefficient; For all protein pairs*
 
 ###Feature matrix
+
 (Any feature which you can put on a pair of proteins)
 python ./protein_complex_maps/features/build_feature_matrix.py
 input:
