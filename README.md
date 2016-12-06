@@ -18,7 +18,9 @@ for each experiment, each species, and all experiments concatenated
 *output is a giant all by all matrix*
 
 **Example**
-`python ./protein_complex_maps/external/infer_complexes/score.py ./examples/Hs_helaN_ph_hcw120_2_psome_exosc_randos.txt poisson`
+```
+python ./protein_complex_maps/external/infer_complexes/score.py ./examples/Hs_helaN_ph_hcw120_2_psome_exosc_randos.txt poisson
+```
 
 ###Reformat all by all to tidy (3 column)
 
@@ -33,7 +35,9 @@ for each experiment, each species, and all experiments concatenated
 *P1 P2 correlation_coefficient; For all protein pairs*
 
 **Example**
-`python ./protein_complex_maps/features/convert_correlation.py --input_correlation_matrix ./examples/Hs_helaN_ph_hcw120_2_psome_exosc_randos.txt.corr_poisson --input_elution_profile ./examples/Hs_helaN_ph_hcw120_2_psome_exosc_randos.txt --output_file ./examples/Hs_helaN_ph_hcw120_2_psome_exosc_randos.txt.corr_poisson_tidy`
+```
+python ./protein_complex_maps/features/convert_correlation.py --input_correlation_matrix ./examples/Hs_helaN_ph_hcw120_2_psome_exosc_randos.txt.corr_poisson --input_elution_profile ./examples/Hs_helaN_ph_hcw120_2_psome_exosc_randos.txt --output_file ./examples/Hs_helaN_ph_hcw120_2_psome_exosc_randos.txt.corr_poisson_tidy
+```
 
 ###Feature matrix
 
@@ -58,7 +62,9 @@ for each experiment, each species, and all experiments concatenated
 *n x m, where n = #prots choose 2, m = # of features*
 
 **Example**
-`python ./protein_complex_maps/features/build_feature_matrix.py --input_pairs_files ./examples/Hs_helaN_ph_hcw120_2_psome_exosc_randos.txt.corr_poisson_tidy --output_file ./examples/Hs_helaN_ph_hcw120_2_psome_exosc_randos.txt.corr_poisson_tidy.featmat`
+```
+python ./protein_complex_maps/features/build_feature_matrix.py --input_pairs_files ./examples/Hs_helaN_ph_hcw120_2_psome_exosc_randos.txt.corr_poisson_tidy --output_file ./examples/Hs_helaN_ph_hcw120_2_psome_exosc_randos.txt.corr_poisson_tidy.featmat
+```
 
 ###Format corum into test and training sets
 *Remove redundancy from corum (merge similar clusters)*
@@ -89,8 +95,10 @@ So say complex 1 = AB, AC, BC & complex 2 = AB AC AD BC BD => complex 1 = AB BC,
 Also make sure complexes between training and test are completely separated*
 
 **Example**
-`python ./protein_complex_maps/complex_merge.py --cluster_filename ./examples/allComplexesCore_geneid.txt --output_filename ./examples/allComplexesCore_geneid_merged06.txt --merge_threshold 0.6`
-`python ./protein_complex_maps/features/split_complexes.py --input_complexes ./examples/allComplexesCore_geneid_merged06.txt`
+```
+python ./protein_complex_maps/complex_merge.py --cluster_filename ./examples/allComplexesCore_geneid.txt --output_filename ./examples/allComplexesCore_geneid_merged06.txt --merge_threshold 0.6
+python ./protein_complex_maps/features/split_complexes.py --input_complexes ./examples/allComplexesCore_geneid_merged06.txt
+```
 
 
 ###Make feature matrix w/ labels from corum 
